@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front-deployment
+  labels:
+    app: todo-front
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: todo-front
+  template:
+    metadata:
+      labels:
+        app: todo-front
+    spec:
+      containers:
+      - name: todo-front
+        image: koszcz/todo-front:latest
+        env:
+          - name: REACT_APP_API_URL
+            valueFrom:
+              configMapKeyRef:
+                name: env-config
+                key: react.app.api.url 
+        ports:
+        - containerPort: 3006

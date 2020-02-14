@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  labels:
+    app: todo-backend
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: todo-backend
+  template:
+    metadata:
+      labels:
+        app: todo-backend
+    spec:
+      containers:
+      - name: todo-backend
+        image: 683390223851.dkr.ecr.eu-central-1.amazonaws.com/todo-backend:latest
+        command: ["bundle"]
+        args: ["exec", "rails", "server", "-p", "3000"]
+        env:
+          - name: DATABASE_URL
+            valueFrom:
+              configMapKeyRef:
+                name: env-config
+                key: database.url
+          - name: RAILS_ENV
+            valueFrom:
+              configMapKeyRef:
+                name: env-config
+                key: rails.env 
+          - name: SECRET_KEY_BASE
+            valueFrom:
+              configMapKeyRef:
+                name: env-config
+                key: secret.key.base 
+        ports:
+        - containerPort: 3000

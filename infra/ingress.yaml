@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: todo-ingress
+spec:
+  rules:
+  - host: k8s-front.app.elpassion.com
+    http:
+      paths:
+      - backend:
+          serviceName: front-service
+          servicePort: 3006
+  - host: k8s-backend.app.elpassion.com
+    http:
+      paths:
+      - backend:
+          serviceName: backend-service
+          servicePort: 80
